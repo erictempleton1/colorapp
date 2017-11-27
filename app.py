@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask.json import jsonify
 import sqlite3
 app = Flask(__name__)
@@ -22,7 +22,8 @@ def index():
         c = conn.cursor()
         c.execute("SELECT * FROM colors")
         results = c.fetchall()
-    return jsonify({"results": results})
+    # return jsonify({"results": results})
+    return render_template("index.html")
 
 @app.route("/api/action/<string:value>", methods=["POST"])
 def action(value):
