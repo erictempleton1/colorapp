@@ -24,15 +24,21 @@ def action():
     post_data = request.form.to_dict(flat=False)
     action = post_data.get("select_action", ["chase"])
     colors = post_data.get("select_colors", ["white"])
-    print action, colors
 
-    # todo - figure out best way to insert data
-    # conn = sqlite3.connect("color_app.db")
-    #with conn:
-    #    c = conn.cursor()
-    #    c.execute("INSERT INTO colors (value) VALUES (?)", (value,))
-    #    conn.commit()
+    conn = sqlite3.connect("color_app.db")
+    with conn:
+        c = conn.cursor()
+        c.execute("INSERT INTO actions (action_name) VALUES (?)", (action[0],))
+        conn.commit()
+        action_id = c.lastrowid
 
+        for color in colors:
+            c.execute(
+                "INSERT INTO colors (value, action_id) VALUES (?, ?)",
+                (color, action_id)
+            )
+            conn.commit()
+        c.execute("SELECT * FROM colors")
     return jsonify({"colors": colors, "action": action})
 
 if __name__ == "__main__":
