@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask.json import jsonify
 import sqlite3
 app = Flask(__name__)
@@ -17,22 +17,23 @@ def status():
 
 @app.route("/", methods=["GET"])
 def index():
-    conn = sqlite3.connect("color_app.db")
-    with conn:
-        c = conn.cursor()
-        c.execute("SELECT * FROM colors")
-        results = c.fetchall()
-    # return jsonify({"results": results})
     return render_template("index.html")
 
-@app.route("/api/action/<string:value>", methods=["POST"])
-def action(value):
-    conn = sqlite3.connect("color_app.db")
-    with conn:
-        c = conn.cursor()
-        c.execute("INSERT INTO colors (value) VALUES (?)", (value,))
-        conn.commit()
-    return "hello"  # todo - return something else here!
+@app.route("/api/action", methods=["POST"])
+def action():
+    post_data = request.form.to_dict(flat=False)
+    action = post_data.get("select_action", ["chase"])
+    colors = post_data.get("select_colors", ["white"])
+    print action, colors
+
+    # todo - figure out best way to insert data
+    # conn = sqlite3.connect("color_app.db")
+    #with conn:
+    #    c = conn.cursor()
+    #    c.execute("INSERT INTO colors (value) VALUES (?)", (value,))
+    #    conn.commit()
+
+    return jsonify({"colors": colors, "action": action})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True, port=5000)
