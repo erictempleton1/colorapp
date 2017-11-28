@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS actions (
     id INTEGER PRIMARY KEY,
     action_name TEXT NOT NULL,
-    selected INTEGER DEFAULT 1,
+    processing INTEGER DEFAULT 0,
+    processed INTEGER DEFAULT 0,
     added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

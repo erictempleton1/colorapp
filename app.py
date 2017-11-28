@@ -4,17 +4,6 @@ import sqlite3
 app = Flask(__name__)
 
 
-@app.route("/api/status", methods=["GET"])
-def status():
-    conn = sqlite3.connect("color_app.db")
-    with conn:
-        c = conn.cursor()
-        c.execute("SELECT value FROM colors WHERE selected = ?", (1,))
-        status = c.fetchone()
-        if status:
-            return jsonify({"status": status[0]})
-    return jsonify({"status": []})
-
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
@@ -38,7 +27,6 @@ def action():
                 (color, action_id)
             )
             conn.commit()
-        c.execute("SELECT * FROM colors")
     return jsonify({"colors": colors, "action": action})
 
 if __name__ == "__main__":
