@@ -10,8 +10,11 @@ while True:
     results = c.fetchone()
     if results:
         print "new record: ", results
+        # todo - update record to processing here
         print "processing..."
         time.sleep(10)
+        # todo - update record to processed here
     else:
+        # revert to default here
         print "nothing found...waiting"
         time.sleep(10)
