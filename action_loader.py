@@ -33,7 +33,7 @@ COLOR_CODES = {
 RUN_TIME = 120  # how long to run each animation in seconds
 
 # LED strip configuration
-LED_COUNT = 16  # number of LED pixels
+LED_COUNT = 72  # number of LED pixels
 LED_PIN = 18  # GPIO pin connected to the pixels
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 5  # DMA channel to use for generating signal (try 5)
