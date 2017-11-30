@@ -42,20 +42,20 @@ LED_INVERT = False  # True to invert the signal (when using NPN transistor level
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45, or 53
 LED_STRIP = ws.WS2811_STRIP_GRB  # strip type and color ordering
 
-def color_wipe(strip, colors):
+def color_wipe(strip, colors, run_time=RUN_TIME):
     """Wipe color across the strip, one pixel at a time."""
     timeout_start = time.time()
-    while time.time() < timeout_start + RUN_TIME:
+    while time.time() < timeout_start + run_time:
         for color in colors:
             for i in range(strip.numPixels()):
                 strip.setPixelColor(i, COLOR_CODES[color])
                 strip.show()
                 time.sleep(50/1000.0)
 
-def theater_chase(strip, colors):
+def theater_chase(strip, colors, run_time=RUN_TIME):
     """Movie theater light style chaser animation."""
     timeout_start = time.time()
-    while time.time() < timeout_start + RUN_TIME:
+    while time.time() < timeout_start + run_time:
         for color in colors:
             for j in range(10):
                 for q in range(3):
@@ -115,5 +115,5 @@ while True:
             # revert to default and wait for update
             colors = ["green", "red", "white"]
             print "nothing found...waiting"
-            ACTIONS["color_wipe"](strip, colors)
-            ACTIONS["theater"](strip, colors)
+            ACTIONS["color_wipe"](strip, colors, 10)
+            #ACTIONS["theater"](strip, colors)
