@@ -1,4 +1,4 @@
-#from neopixel import *
+from neopixel import *
 
 import argparse
 import signal
