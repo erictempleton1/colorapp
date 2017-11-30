@@ -1,10 +1,11 @@
-from neopixel import *
+#from neopixel import *
 
 import argparse
 import signal
 import sys
 import sqlite3
 import time
+
 
 def signal_handler(signal, time):
     color_wipe(strip, Color(0, 0, 0))
@@ -28,9 +29,6 @@ COLOR_CODES = {
     "white": Color(127, 127, 127),
     "yellow": Color(255, 255, 0)
 }
-
-# action dispatcher
-ACTIONS = {"wipe": color_wipe}
 
 RUN_TIME = 120  # how long to run each animation in seconds
 
@@ -68,6 +66,26 @@ def theater_chase(strip, colors):
                     for i in range(0, strip.numPixels(), 3):
                         strip.setPixelColor(i+q, 0)
 
+# action dispatcher
+ACTIONS = {
+    "color_wipe": color_wipe,
+    "theater": theater_chase
+}
+
+# Create NeoPixel object with appropriate configuration.
+strip = Adafruit_NeoPixel(
+    LED_COUNT, 
+    LED_PIN, 
+    LED_FREQ_HZ, 
+    LED_DMA, 
+    LED_INVERT, 
+    LED_BRIGHTNESS, 
+    LED_CHANNEL, 
+    LED_STRIP
+)
+# Intialize the library (must be called once before other functions).
+strip.begin()
+
 conn = sqlite3.connect("color_app.db")
 
 while True:
@@ -76,19 +94,26 @@ while True:
         c.execute(
             "SELECT * FROM actions WHERE processed = 0 ORDER BY added ASC LIMIT 1;"
         )
-        result = c.fetchone()
-        if result:
-            print "new record: ", result
-            c.execute("UPDATE actions SET processing = 1 WHERE id = ?", (result[0],))
+        action = c.fetchone()
+        if action:
+            c.execute(
+                "SELECT value FROM colors WHERE action_id = ?", (action[0],)
+            )
+            colors = [color[0] for color in c.fetchall()]
+
+            print "action:", action[1], "|", "colors:", colors
+            ACTIONS[action](strip, colors)
+
+            c.execute("UPDATE actions SET processing = 1 WHERE id = ?", (action[0],))
             conn.commit()
-            print "processing..."
-            time.sleep(10)
             c.execute(
                 "UPDATE actions SET processing = 0, processed = 1 WHERE id = ?",
-                (result[0],)
+                (action[0],)
             )
             conn.commit()
         else:
-            # revert to default here
+            # revert to default and wait for update
+            colors = ["green", "red", "white"]
             print "nothing found...waiting"
-            time.sleep(10)
+            ACTIONS["color_wipe"](strip, colors)
+            ACTIONS["theater"](strip, colors)
