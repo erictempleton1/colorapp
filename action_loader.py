@@ -102,7 +102,7 @@ while True:
             colors = [color[0] for color in c.fetchall()]
 
             print "action:", action[1], "|", "colors:", colors
-            ACTIONS[action](strip, colors)
+            ACTIONS[action[1]](strip, colors)
 
             c.execute("UPDATE actions SET processing = 1 WHERE id = ?", (action[0],))
             conn.commit()
