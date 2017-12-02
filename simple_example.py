@@ -19,12 +19,19 @@ def color_wipe(strip, color, wait_ms=50):
 		strip.show()
 		time.sleep(wait_ms/1000.0)
 
+def allonecolor(strip, color):
+  # Paint the entire matrix one colour
+  for i in range(strip.numPixels()):
+    strip.setPixelColor(i, color)
+  strip.show()
+  time.sleep(10)
 
 if __name__ == "__main__":
     strip = Adafruit_NeoPixel(
         LED_COUNT, LED_PIN, LED_FREQ_HZ, 
         LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     strip.begin()
-    while True:
-        print "color wipe"
-        color_wipe(strip, color(255, 255, 255))
+    allonecolor(strip, color(255, 255, 255))
+    #while True:
+    #    print "color wipe"
+    #    color_wipe(strip, color(255, 255, 255))
