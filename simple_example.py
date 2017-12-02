@@ -33,4 +33,4 @@ if __name__ == "__main__":
     strip.begin()
     while True:
         print "color wipe"
-        color_wipe(strip, color(255, 255, 255))
+        color_wipe(strip, color(0, 127, 127))
