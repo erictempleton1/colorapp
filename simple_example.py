@@ -22,15 +22,9 @@ def color_wipe(strip, color, wait_ms=50):
 
 if __name__ == "__main__":
     strip = Adafruit_NeoPixel(
-        LED_COUNT,
-        LED_PIN,
-        LED_FREQ_HZ,
-        LED_DMA,
-        LED_BRIGHTNESS,
-        LED_INVERT,
-        LED_CHANNEL
-    )
+        LED_COUNT, LED_PIN, LED_FREQ_HZ, 
+        LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     strip.begin()
     while True:
         print "color wipe"
-        color_wipe(strip, color(0, 127, 127))
+        color_wipe(strip, color(255, 255, 255))
